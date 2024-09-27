@@ -139,3 +139,125 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "sso/sso.proto",
 }
+
+// UserDataClient is the client API for UserData service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type UserDataClient interface {
+	GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error)
+	SaveData(ctx context.Context, in *SaveDataRequest, opts ...grpc.CallOption) (*SaveDataResponse, error)
+}
+
+type userDataClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewUserDataClient(cc grpc.ClientConnInterface) UserDataClient {
+	return &userDataClient{cc}
+}
+
+func (c *userDataClient) GetData(ctx context.Context, in *GetDataRequest, opts ...grpc.CallOption) (*GetDataResponse, error) {
+	out := new(GetDataResponse)
+	err := c.cc.Invoke(ctx, "/auth.UserData/GetData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userDataClient) SaveData(ctx context.Context, in *SaveDataRequest, opts ...grpc.CallOption) (*SaveDataResponse, error) {
+	out := new(SaveDataResponse)
+	err := c.cc.Invoke(ctx, "/auth.UserData/SaveData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// UserDataServer is the server API for UserData service.
+// All implementations must embed UnimplementedUserDataServer
+// for forward compatibility
+type UserDataServer interface {
+	GetData(context.Context, *GetDataRequest) (*GetDataResponse, error)
+	SaveData(context.Context, *SaveDataRequest) (*SaveDataResponse, error)
+	mustEmbedUnimplementedUserDataServer()
+}
+
+// UnimplementedUserDataServer must be embedded to have forward compatible implementations.
+type UnimplementedUserDataServer struct {
+}
+
+func (UnimplementedUserDataServer) GetData(context.Context, *GetDataRequest) (*GetDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetData not implemented")
+}
+func (UnimplementedUserDataServer) SaveData(context.Context, *SaveDataRequest) (*SaveDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveData not implemented")
+}
+func (UnimplementedUserDataServer) mustEmbedUnimplementedUserDataServer() {}
+
+// UnsafeUserDataServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserDataServer will
+// result in compilation errors.
+type UnsafeUserDataServer interface {
+	mustEmbedUnimplementedUserDataServer()
+}
+
+func RegisterUserDataServer(s grpc.ServiceRegistrar, srv UserDataServer) {
+	s.RegisterService(&UserData_ServiceDesc, srv)
+}
+
+func _UserData_GetData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserDataServer).GetData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.UserData/GetData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserDataServer).GetData(ctx, req.(*GetDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserData_SaveData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserDataServer).SaveData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.UserData/SaveData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserDataServer).SaveData(ctx, req.(*SaveDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// UserData_ServiceDesc is the grpc.ServiceDesc for UserData service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var UserData_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "auth.UserData",
+	HandlerType: (*UserDataServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetData",
+			Handler:    _UserData_GetData_Handler,
+		},
+		{
+			MethodName: "SaveData",
+			Handler:    _UserData_SaveData_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sso/sso.proto",
+}

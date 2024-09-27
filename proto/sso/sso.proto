@@ -9,6 +9,11 @@ service Auth {
     rpc Login (LoginRequest) returns (LoginResponse);
 }
 
+service UserData {
+    rpc GetData (GetDataRequest) returns (GetDataResponse);
+    rpc SaveData (SaveDataRequest) returns (SaveDataResponse);
+}
+
 message RegisterRequest {
     string email = 1; // Email of the user to register
     string password = 2; // Password of the user to register
@@ -25,4 +30,25 @@ message LoginRequest {
 
 message LoginResponse {
     string token = 1; // Auth token of the logged in user
+}
+
+message GetDataRequest {
+    string token = 1;
+    string data_type = 2; // Auth token of the user
+}
+
+message GetDataResponse {
+    string token = 1;
+    string data_type = 2;
+    string data = 3; //Get user data
+}
+
+message SaveDataRequest {
+    string token = 1; // JWT
+    string data_type = 2; // Text, card, password, etc.
+    string data = 3;
+}
+
+message SaveDataResponse {
+    string token = 1;
 }
