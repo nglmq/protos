@@ -34,7 +34,6 @@ message LoginResponse {
 
 message GetDataRequest {
     string token = 1;
-    string data_type = 2; // Auth token of the user
 }
 
 message GetDataResponse {
