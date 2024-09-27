@@ -39,8 +39,13 @@ message GetDataRequest {
 
 message GetDataResponse {
     string token = 1;
-    string data_type = 2;
-    string data = 3; //Get user data
+    repeated Data data = 2;
+}
+
+message Data {
+    string data_type = 1;
+    string content = 2;
+    string meta_info = 3;
 }
 
 message SaveDataRequest {
