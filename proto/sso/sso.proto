@@ -44,7 +44,7 @@ message GetDataResponse {
 message Data {
     string data_type = 1;
     string content = 2;
-    string meta_info = 3;
+    //string meta_info = 3;
 }
 
 message SaveDataRequest {
